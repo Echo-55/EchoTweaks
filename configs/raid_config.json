@@ -1,0 +1,32 @@
+{
+    "Thermal_Cultists": true,
+    "Remove_Skill_Fatigue": true,
+    "Tweak_Skill_Rate": {
+        "Enabled": true,
+        "Skill_Progress_Rate": 4.0
+    },
+    "Tweak_Weapon_Skill_Rate": {
+        "Enabled": true,
+        "Weapon_Skill_Progress_Rate_Multiplier": 4.0
+    },
+    "Tweak_Scav_Cooldown": {
+        "Enabled": true,
+        "Scav_Cooldown": 60
+    },
+    "Tweak_Raid_Exp_Multipliers": {
+        "Enabled": true,
+        "Runner_Multiplier": 0.5,
+        "MIA_Multiplier": 1.0,
+        "Survivor_Multiplier": 1.5,
+        "Killed_Multiplier": 1.0
+    },
+    "Tweak_Raid_Menu": {
+        "Enabled": true,
+        "MIA_On_Raid_End": true,
+        "AI_Amount": "AsOnline",
+        "AI_Difficulty": "AsOnline",
+        "Boss_Enabled": true,
+        "Time_Before_Deploy": 1,
+        "Time_Before_Deploy_Local": 1
+    }
+}

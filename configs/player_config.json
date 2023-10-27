@@ -1,0 +1,29 @@
+{
+    "Custom_Health": {
+        "Enabled": true,
+        "Head": 200,
+        "Chest": 200,
+        "Stomach": 200,
+        "LeftArm": 200,
+        "LeftLeg": 200,
+        "RightArm": 200,
+        "RightLeg": 200
+    },
+    "Enable_Unlimited_Stamina": true,
+    "Tweak_Load_Speed": {
+        "Enabled": true,
+        "Base_Check_Time": 0.1,
+        "Base_Load_Time": 0.1,
+        "Base_Unload_Time": 0.1
+    },
+    "Tweak_Ragfair_Level": {
+        "Enabled": true,
+        "Min_Level": 5
+    },
+    "Big_Pockets": {
+        "Enabled": true,
+        "cellsH": 1,
+        "cellsV": 3
+    },
+    "All_Clothes_Available": true
+}

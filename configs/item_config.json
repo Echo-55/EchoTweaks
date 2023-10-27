@@ -1,0 +1,182 @@
+{
+    "Tweak_Secure_Container_Ammo_Stack_Count": {
+        "Enabled": true,
+        "Ammo_Stack_Count": 10
+    },
+    "Examine_Everything": true,
+    "Lil_Big_Mags": true,
+    "Stackable_Barters": {
+        "Enabled": true,
+        "Battery": 5,
+        "Building_Materials": 10,
+        "Electronics": 10,
+        "Household_Goods": 10,
+        "Valuables": 5,
+        "Med_Supplies": 10,
+        "Fuel": 5,
+        "Tools": 5,
+        "Other": 5
+    },
+    "Tweak_Cases": {
+        "Enabled": true,
+        "Disable_Filters": false,
+        "Cases": {
+            "KeycardHolderCase": {
+                "Enabled": true,
+                "HSize": 4,
+                "VSize": 4,
+                "Filter": false
+            },
+            "InjectorCase": {
+                "Enabled": true,
+                "HSize": 6,
+                "VSize": 6,
+                "Filter": false
+            },
+            "Holodilnick": {
+                "Enabled": true,
+                "HSize": 8,
+                "VSize": 8,
+                "Filter": false
+            },
+            "PistolCase": {
+                "Enabled": true,
+                "HSize": 4,
+                "VSize": 3,
+                "Filter": false
+            },
+            "DocumentsCase": {
+                "Enabled": true,
+                "HSize": 4,
+                "VSize": 4,
+                "Filter": false
+            },
+            "Keytool": {
+                "Enabled": true,
+                "HSize": 14,
+                "VSize": 14,
+                "Filter": false
+            },
+            "SiccCase": {
+                "Enabled": true,
+                "HSize": 5,
+                "VSize": 5,
+                "Filter": false
+            },
+            "ThiccWeaponCase": {
+                "Enabled": true,
+                "HSize": 6,
+                "VSize": 15,
+                "Filter": false
+            },
+            "ThiccItemsCase": {
+                "Enabled": true,
+                "HSize": 14,
+                "VSize": 14,
+                "Filter": true
+            },
+            "MedicineCase": {
+                "Enabled": true,
+                "HSize": 7,
+                "VSize": 7,
+                "Filter": false
+            },
+            "DogtagCase": {
+                "Enabled": true,
+                "HSize": 10,
+                "VSize": 10,
+                "Filter": false
+            },
+            "MagazineCase": {
+                "Enabled": true,
+                "HSize": 7,
+                "VSize": 7,
+                "Filter": false
+            },
+            "AmmunitionCase": {
+                "Enabled": true,
+                "HSize": 7,
+                "VSize": 7,
+                "Filter": false
+            },
+            "LuckyScav": {
+                "Enabled": true,
+                "HSize": 14,
+                "VSize": 14,
+                "Filter": false
+            },
+            "WeaponCase": {
+                "Enabled": true,
+                "HSize": 10,
+                "VSize": 5,
+                "Filter": false
+            },
+            "ItemsCase": {
+                "Enabled": true,
+                "HSize": 8,
+                "VSize": 8,
+                "Filter": false
+            },
+            "GrenadeCase": {
+                "Enabled": true,
+                "HSize": 8,
+                "VSize": 8,
+                "Filter": false
+            },
+            "WZWallet": {
+                "Enabled": true,
+                "HSize": 2,
+                "VSize": 2,
+                "Filter": false
+            },
+            "SimpleWallet": {
+                "Enabled": true,
+                "HSize": 2,
+                "VSize": 2,
+                "Filter": false
+            },
+            "MoneyCase": {
+                "Enabled": true,
+                "HSize": 7,
+                "VSize": 7,
+                "Filter": false
+            }
+        },
+        "SecureContainers": {
+            "Kappa": {
+                "Enabled": true,
+                "HSize": 3,
+                "VSize": 4,
+                "Filter": false
+            },
+            "Alpha": {
+                "Enabled": true,
+                "HSize": 2,
+                "VSize": 2,
+                "Filter": false
+            },
+            "Beta": {
+                "Enabled": true,
+                "HSize": 3,
+                "VSize": 2,
+                "Filter": false
+            },
+            "Gamma": {
+                "Enabled": true,
+                "HSize": 3,
+                "VSize": 3,
+                "Filter": false
+            },
+            "Epsilon": {
+                "Enabled": true,
+                "HSize": 4,
+                "VSize": 2,
+                "Filter": false
+            }
+        }
+    },
+    "Tweak_Meds": {
+        "Enabled": true,
+        "Goldenstar_Remove_Contusion": true
+    }
+}

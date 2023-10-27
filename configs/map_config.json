@@ -1,0 +1,26 @@
+{
+    "Tweak_Airdrops": {
+        "Enabled": true,
+        "Plane_Airdrop_Chance": 80,
+        "Max_Airdrops": 3,
+        "Plane_Airdrop_Start_Max": 450,
+        "Plane_Airdrop_Start_Min": 150,
+        "Plane_Airdrop_Cooldown_Min": 300,
+        "Plane_Airdrop_Cooldown_Max": 350,
+        "Min_Players_Count_To_Spawn_Airdrop": 1,
+        "Plane_Volume": 0.5
+    },
+    "Tweak_Loot_Modifier": {
+        "Enabled": true,
+        "Global_Loot_Chance_Modifier": 2,
+        "All_Maps_LooseLoot_Modifier": 2,
+        "All_Maps_StaticLoot_Modifier": 2
+    },
+    "Tweak_Weather": true,
+    "Remove_Labs_Keycard_Requirement": true,
+    "Tweak_LooseLoot_Weapon_Durability": {
+        "Enabled": true,
+        "Max_Durability": 100,
+        "Min_Durability": 90
+    }
+}

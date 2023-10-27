@@ -1,0 +1,41 @@
+{
+    "Tweak_Bot_Waves": {
+        "Enabled": false,
+        "low": 1.0,
+        "medium": 1.3,
+        "high": 1.6,
+        "horde": 10.0,
+        "as_online": 1.0
+    },
+    "Tweak_Bot_Count": {
+        "Enabled": false,
+        "Max_Alive_Bots": 12,
+        "Local_Bots_Count": 80
+    },
+    "Tweak_Boss_Spawn_Chance": {
+        "Enabled": false,
+        "Boss_Spawn_Chance": 0.0,
+        "adaptive": true,
+        "sectantPriest": 28,
+        "bossBully": 38,
+        "bossKilla": 38,
+        "bossGluhar": 43,
+        "bossSanitar": 35,
+        "bossTagilla": 38,
+        "bossKojaniy": 39
+    },
+    "Tweak_Bot_Gear_Durability": {
+        "Enabled": true,
+        "Min_Armor_Durability": 90,
+        "Max_Armor_Durability": 100,
+        "Min_Weapon_Durability": 90,
+        "Max_Weapon_Durability": 100
+    },
+    "Tweak_Bot_Loot_Value": {
+        "Enabled": true,
+        "Max_Backpack_Loot_Value": 150000,
+        "Max_Pocket_Loot_Value": 50000,
+        "Max_Vest_Loot_Value": 50000,
+        "Max_Loot_Value": 1.0
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "Disable_Blacklist": true,
+    "Tweak_Insurance": {
+        "Enabled": true,
+        "Price_Multiplier": 0.35,
+        "Return_Chance": 100,
+        "Max_Storage_Time": 144
+    },
+    "Tweak_Quest_Redeem_Time": {
+        "Enabled": true,
+        "Redeem_Time": 96
+    },
+    "New_Items_Marked_FIR": true,
+    "Tweak_Fence_Assort": {
+        "Enabled": true,
+        "Assort_Size": 50,
+        "Min_Durability": 75,
+        "Refresh_Time": 3600
+    },
+    "Holster_SMGs": true,
+    "Tweak_Ammo_Stacks": {
+        "Enabled": true,
+        "Stack_Size_Multi": 4
+    },
+    "Tweak_Money_Stacks": {
+        "Enabled": true,
+        "EUR_Max_Stack_Size": 100000,
+        "USD_Max_Stack_Size": 100000,
+        "RUB_Max_Stack_Size": 1000000
+    },
+    "Tweak_Hearing": true,
+    "Wear_Rigs_With_Armor": true
+}

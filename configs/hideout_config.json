@@ -1,0 +1,26 @@
+{
+    "Tweak_Hideout_Speed": true,
+    "Tweak_Scav_Case": {
+        "Enabled": true,
+        "Fast_Scav_Case": true,
+        "Fast_Scav_Case_Multiplier": 1.5,
+        "Production_Time": 10,
+        "Reduce_Price": true
+    },
+    "Reduce_Construction_Time": {
+        "Enabled": true,
+        "Multiplier": 0.5
+    },
+    "Remove_Hideout_Construction_Requirements": {
+        "Enabled": true
+    },
+    "Reduce_Production_Time_Multiplier": {
+        "Enabled": true,
+        "Reduce_Production_Time_Multiplier": 1.0,
+        "WaterFilterTime": 0.0,
+        "WaterFilterRate": 0.0,
+        "BitcoinTime": 0.0,
+        "MaxBitcoins": 0.0,
+        "HideoutProdMult": 1.0
+    }
+}

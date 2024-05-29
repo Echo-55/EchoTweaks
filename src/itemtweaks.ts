@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import item_config from "../configs/item_config.json"
 import { DependencyContainer } from "@spt/models/external/tsyringe";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
@@ -5,99 +6,48 @@ import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
 import { EchoBaseTweak } from "./Base/basetweak";
 
-class EchoItemTweaks extends EchoBaseTweak
+class EchoItemTweaks extends EchoBaseTweak 
 {
     moduleName = "ItemTweaks";
-    public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
+    public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables) 
     {
         super(container, logger, dataBase);
     }
 
-    public init(): void
+    public init(): void 
     {
         super.init();
 
         //* Secure container ammo stack count
-        if (item_config.Tweak_Secure_Container_Ammo_Stack_Count)
+        if (item_config.Tweak_Secure_Container_Ammo_Stack_Count) 
         {
             this.botConfig.secureContainerAmmoStackCount = item_config.Tweak_Secure_Container_Ammo_Stack_Count.Ammo_Stack_Count;
-            this.logger.logWithColor(
-                `${this.modName} - Updated Secure Container Ammo Stack Count`,
-                LogTextColor.GREEN
-            );
+            this.logToConsole("Item Tweaks - Updated Secure Container Ammo Stack Count", LogTextColor.GREEN);
         }
 
         //*Examine everything other than keys
-        if (item_config.Examine_Everything === true) 
+        if (item_config.Examine_Everything) 
         {
-            const parents = ["5c99f98d86f7745c314214b3", "5c164d2286f774194c5e69fa"];
-
-            for (const i in this.itemsData) 
-            {
-                const item = this.itemsData[i];
-                if (parents.includes(item._parent)) 
-                {
-                    item._props.ExaminedByDefault = false;
-                }
-                else 
-                {
-                    item._props.ExaminedByDefault = true;
-                }
-            }
-            this.logger.logWithColor(
-                `${this.moduleName} - Examine Everything Enabled`,
-                LogTextColor.GREEN
-            );
+            this.examineEverything();
         }
 
         //* High cap mags only two slots
-        if (item_config.Lil_Big_Mags) 
+        if (item_config.Lil_Big_Mags)
         {
-            for (const i in this.itemsData) 
-            {
-                const item = this.itemsData[i];
-                if (
-                    item._parent === "5448bc234bdc2d3c308b4569" &&
-                    item._props.Height > 2
-                ) 
-                {
-                    item._props.Height = 2;
-                }
-                if (item._id === "5d2f213448f0355009199284") 
-                {
-                    item._props.Height = 1;
-                }
-            }
-            this.logger.logWithColor(
-                `${this.moduleName} - Lil Big Mags Enabled`,
-                LogTextColor.GREEN
-            );
+            this.adjustMagSizes();
         }
 
         //*Change Item Case and THICC Case to hold Grenade Cases
-        if (item_config.Tweak_Cases.Enabled) 
+        if (item_config.Tweak_Cases.Enabled)
         {
-            //Add Grenade Case to Item Case
-            this.itemsData[
-                "59fb042886f7746c5005a7b2"
-            ]._props.Grids[0]._props.filters[0].Filter.push(
-                "5e2af55f86f7746d4159f07c"
-            );
-            //Add Grenade Case to THICC Case
-            this.itemsData[
-                "5c0a840b86f7742ffa4f2482"
-            ]._props.Grids[0]._props.filters[0].Filter.push(
-                "5e2af55f86f7746d4159f07c"
-            );
-            this.logger.logWithColor(
-                `${this.moduleName} - Updated Case Filters`,
-                LogTextColor.GREEN
-            );
+            this.updateCaseFilters();
         }
 
         //*Change Meds
         if (item_config.Tweak_Meds.Enabled) 
         {
+            // this.tweakMeds();
+
             //Analgin painkillers
             const analgin = this.itemsData["544fb37f4bdc2dee738b4567"];
             analgin._props.effects_damage.Pain.duration = 95;
@@ -133,7 +83,7 @@ class EchoItemTweaks extends EchoBaseTweak
             ]._props.effects_damage.Pain.duration = 350;
             this.logger.logWithColor(`${this.moduleName} - Updated Meds`, LogTextColor.GREEN);
 
-            if (item_config.Tweak_Meds.Goldenstar_Remove_Contusion === true) 
+            if (item_config.Tweak_Meds.Goldenstar_Remove_Contusion) 
             {
                 //Golden Star balm
                 this.globalsConfig.Health.Effects.Stimulator.Buffs.BuffsGoldenStarBalm =
@@ -143,16 +93,13 @@ class EchoItemTweaks extends EchoBaseTweak
                 this.itemsData["5751a89d24597722aa0e8db0"]._props.effects_damage = JSON.parse(
                     "{\"Pain\": {\"delay\": 1,\"duration\": 350,\"fadeOut\": 20},\"RadExposure\": {\"delay\": 0,\"duration\": 400,\"fadeOut\": 20}}"
                 );
-                this.logger.logWithColor(
-                    `${this.moduleName} - Removed contusion Golden Star Balm`,
-                    LogTextColor.GREEN
-                );
             }
         }
 
         //* Change Caze Sizes and Eliminate Filters
-        if (item_config.Tweak_Cases.Enabled === true) 
+        if (item_config.Tweak_Cases.Enabled) 
         {
+            // this.updateCases();
             const cases = item_config.Tweak_Cases.Cases;
             const secCon = item_config.Tweak_Cases.SecureContainers;
             const casesID = [
@@ -279,7 +226,7 @@ class EchoItemTweaks extends EchoBaseTweak
             }
             for (const filter in filters) 
             {
-                if (item_config.Tweak_Cases.Disable_Filters === true) 
+                if (item_config.Tweak_Cases.Disable_Filters) 
                 {
                     this.itemsData[casesID[filter]]._props.Grids[0]._props["filter"] = "";
                 }
@@ -291,92 +238,164 @@ class EchoItemTweaks extends EchoBaseTweak
         }
 
         //* Stackable Barters
-        if (item_config.Stackable_Barters.Enabled === true) 
+        if (item_config.Stackable_Barters.Enabled) 
         {
-            for (const id in this.itemsData) 
+            this.stackableBarters();
+        }
+    }
+
+    private examineEverything(): void
+    {
+        const keyParentIds = ["5c99f98d86f7745c314214b3", "5c164d2286f774194c5e69fa"];
+        for (const item of Object.values(this.itemsData))
+        {
+            item._props.ExaminedByDefault = !keyParentIds.includes(item._parent);
+        }
+        this.logToConsole(`${this.moduleName} - Examine Everything`, LogTextColor.GREEN);
+    }
+
+    private adjustMagSizes(): void 
+    {
+        for (const item of Object.values(this.itemsData)) 
+        {
+            if (item._parent === "5448bc234bdc2d3c308b4569" && item._props.Height > 2) 
             {
-                const base = this.itemsData[id];
-                switch (base._parent) 
+                item._props.Height = 2;
+            }
+            else if (item._id === "5d2f213448f0355009199284") 
+            {
+                item._props.Height = 1;
+            }
+        }
+        this.logToConsole(`${this.moduleName} - Adjusted Mag Sizes`, LogTextColor.GREEN);
+    }
+
+    private updateCaseFilters(): void 
+    {
+        const caseIds = ["59fb042886f7746c5005a7b2", "5c0a840b86f7742ffa4f2482"];
+        for (const caseId of caseIds) 
+        {
+            const itemCase = this.itemsData[caseId];
+            for (const grid of itemCase._props.Grids) 
+            {
+                for (const filter of grid._props.filters) 
                 {
-                    //Battery
-                    case "57864ee62459775490116fc1":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Battery
-                        );
-                        break;
-                    //Building materials
-                    case "57864ada245977548638de91":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Building_Materials
-                        );
-                        break;
-                    //Electronics
-                    case "57864a66245977548f04a81f":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Electronics
-                        );
-                        break;
-                    //Household goods
-                    case "57864c322459775490116fbf":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Household_Goods
-                        );
-                        break;
-                    // Valuables
-                    case "57864a3d24597754843f8721":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Valuables
-                        );
-                        break;
-                    //Medical supplies
-                    case "57864c8c245977548867e7f1":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Med_Supplies
-                        );
-                        break;
-                    //Flammable
-                    case "57864e4c24597754843f8723":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Fuel
-                        );
-                        break;
-                    //Tools
-                    case "57864bb7245977548b3b66c2":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Tools
-                        );
-                        break;
-                    //Other
-                    case "590c745b86f7743cc433c5f2":
-                        this.editSimpleItemData(
-                            id,
-                            "StackMaxSize",
-                            item_config.Stackable_Barters.Other
-                        );
-                        break;
+                    filter.Filter.push("5e2af55f86f7746d4159f07c");
                 }
             }
-            this.logger.logWithColor(
-                `${this.moduleName} - Updated Barter Stack Size`,
-                LogTextColor.GREEN
-            );
         }
+        this.logToConsole(`${this.moduleName} - Updated Case Filters`, LogTextColor.GREEN);
+    }
+
+    private tweakMeds(): void 
+    {
+        const meds = {
+            "544fb37f4bdc2dee738b4567": { Pain: { duration: 95 } },
+            "590c695186f7741e566b64a2": { Energy: 15, Hydration: -20 },
+            "544fb3f34bdc2d03748b456a": { Energy: -5, Hydration: -10 },
+            "5af0548586f7743a532b7e99": { Hydration: -15 },
+            "5755383e24597772cb798966": { MaxHpResource: 6, Energy: -5, Hydration: -5 },
+            "5751a89d24597722aa0e8db0": { Energy: -15, Pain: { duration: 350 } }
+        };
+
+        for (const [id, props] of Object.entries(meds)) 
+        {
+            for (const [prop, value] of Object.entries(props)) 
+            {
+                this.itemsData[id]._props.effects_health[prop] = value;
+            }
+        }
+
+        if (item_config.Tweak_Meds.Goldenstar_Remove_Contusion) 
+        {
+            this.globalsConfig.Health.Effects.Stimulator.Buffs.BuffsGoldenStarBalm = [
+                { SkillName: "", BuffType: "EnergyRate", Chance: 1, Delay: 1, Duration: 5, Value: 1, AbsoluteValue: true },
+                { SkillName: "", BuffType: "HydrationRate", Chance: 1, Delay: 1, Duration: 5, Value: 1, AbsoluteValue: true }
+            ];
+            this.itemsData["5751a89d24597722aa0e8db0"]._props.effects_damage = {
+                Pain: { delay: 1, duration: 350, fadeOut: 20 },
+                RadExposure: { delay: 0, duration: 400, fadeOut: 20 }
+            };
+        }
+
+        this.logToConsole("Updated Meds", LogTextColor.GREEN);
+    }
+
+    private updateCases(): void 
+    {
+        const caseIds = [
+            "59fb016586f7746d0d4b423a",
+            "5783c43d2459774bbe137486",
+            "60b0f6c058e0b0481a09ad11",
+            "5e2af55f86f7746d4159f07c",
+            "59fb042886f7746c5005a7b2",
+            "59fb023c86f7746d0d4b423c",
+            "5b7c710788a4506dec015957",
+            "5aafbde786f774389d0cbc0f",
+            "5c127c4486f7745625356c13",
+            "5c093e3486f77430cb02e593",
+            "5aafbcd986f7745e590fff23",
+            "5c0a840b86f7742ffa4f2482",
+            "5b6d9ce188a4501afc1b2b25",
+            "5d235bb686f77443f4331278",
+            "59fafd4b86f7745ca07e1232",
+            "590c60fc86f77412b13fddcf",
+            "567143bf4bdc2d1a0f8b4567",
+            "5c093db286f7740a1b2617e3",
+            "619cbf7d23893217ec30b689",
+            "619cbf9e0a7c3a1a2731940a"
+        ];
+        const secConIds = [
+            "544a11ac4bdc2d470e8b456a",
+            "5c093ca986f7740a1867ab12",
+            "5857a8b324597729ab0a0e7d",
+            "59db794186f77448bc595262",
+            "5857a8bc2459772bad15db29"
+        ];
+
+        caseIds.forEach((id, index) => 
+        {
+            this.itemsData[id]._props.Grids[0]._props.cellsV = item_config.Tweak_Cases.Cases[`case${index}`].VSize;
+            this.itemsData[id]._props.Grids[0]._props.cellsH = item_config.Tweak_Cases.Cases[`case${index}`].HSize;
+        });
+
+        secConIds.forEach((id, index) => 
+        {
+            this.itemsData[id]._props.Grids[0]._props.cellsV = item_config.Tweak_Cases.SecureContainers[`container${index}`].VSize;
+            this.itemsData[id]._props.Grids[0]._props.cellsH = item_config.Tweak_Cases.SecureContainers[`container${index}`].HSize;
+        });
+
+        if (item_config.Tweak_Cases.Disable_Filters) 
+        {
+            caseIds.forEach(id => 
+            {
+                this.itemsData[id]._props.Grids[0]._props.filters = [];
+            });
+        }
+
+        this.logToConsole("Updated Case Sizes", LogTextColor.GREEN);
+    }
+
+    private stackableBarters(): void 
+    {
+        const barterItems = {
+            "57864ee62459775490116fc1": item_config.Stackable_Barters.Battery,
+            "57864ada245977548638de91": item_config.Stackable_Barters.Building_Materials,
+            "57864a66245977548f04a81f": item_config.Stackable_Barters.Electronics,
+            "57864c322459775490116fbf": item_config.Stackable_Barters.Household_Goods,
+            "57864a3d24597754843f8721": item_config.Stackable_Barters.Valuables,
+            "57864c8c245977548867e7f1": item_config.Stackable_Barters.Med_Supplies,
+            "57864e4c24597754843f8723": item_config.Stackable_Barters.Fuel,
+            "57864bb7245977548b3b66c2": item_config.Stackable_Barters.Tools,
+            "590c745b86f7743cc433c5f2": item_config.Stackable_Barters.Other
+        };
+
+        for (const [id, stackSize] of Object.entries(barterItems)) 
+        {
+            this.itemsData[id]._props.StackMaxSize = stackSize;
+        }
+
+        this.logToConsole(`${this.moduleName} - Updated stackable barters`, LogTextColor.GREEN);
     }
 }
 

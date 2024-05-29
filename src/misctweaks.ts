@@ -41,7 +41,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         super.init();
 
         //* Disable flea blacklist
-        if (misc_config.Disable_Blacklist === true) 
+        if (misc_config.Disable_Blacklist) 
         {
             let canSellCount = 0;
             this.ragfairConfig.dynamic.blacklist.enableBsgList = false;
@@ -65,7 +65,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //*Change Insurance Price Multiplier, Return Chance, and Max Storage Time.
-        if (misc_config.Tweak_Insurance.Enabled === true) 
+        if (misc_config.Tweak_Insurance.Enabled) 
         {
             this.insuranceConfig.priceMultiplier =
                 misc_config.Tweak_Insurance.Price_Multiplier;
@@ -86,7 +86,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //*Change Quest Redeem Tme
-        if (misc_config.Tweak_Quest_Redeem_Time.Enabled === true) 
+        if (misc_config.Tweak_Quest_Redeem_Time.Enabled) 
         {
             this.questConfig.redeemTime = misc_config.Tweak_Quest_Redeem_Time.Redeem_Time;
             this.logger.logWithColor(
@@ -96,7 +96,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //*Mark New Items FIR
-        if (misc_config.New_Items_Marked_FIR === true) 
+        if (misc_config.New_Items_Marked_FIR) 
         {
             this.inventoryConfig.newItemsMarkedFound = true;
             this.logger.logWithColor(
@@ -106,7 +106,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //*Change Fence Assort Size, Min Durability, and Refresh Time
-        if (misc_config.Tweak_Fence_Assort.Enabled === true) 
+        if (misc_config.Tweak_Fence_Assort.Enabled) 
         {
             this.traderConfig.fenceAssortSize = misc_config.Tweak_Fence_Assort.Assort_Size;
             this.traderConfig.minDurabilityForSale =
@@ -119,7 +119,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //* Holster SMGs
-        if (misc_config.Holster_SMGs === true) 
+        if (misc_config.Holster_SMGs) 
         {
             const inventory = this.itemsData["55d7217a4bdc2d86028b456d"];
             const holster = inventory._props.Slots[2];
@@ -132,7 +132,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //* Bigger Ammo Stacks
-        if (misc_config.Tweak_Ammo_Stacks.Enabled === true) 
+        if (misc_config.Tweak_Ammo_Stacks.Enabled) 
         {
             for (const ammo in this.itemsData) 
             {
@@ -151,7 +151,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //* Bigger Money Stacks
-        if (misc_config.Tweak_Money_Stacks.Enabled === true) 
+        if (misc_config.Tweak_Money_Stacks.Enabled) 
         {
             const euros = this.itemsData["569668774bdc2da2298b4568"]; //Euros
             const usd = this.itemsData["5696686a4bdc2da3298b456a"]; //USD
@@ -170,7 +170,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //* Better Hearing
-        if (misc_config.Tweak_Hearing === true) 
+        if (misc_config.Tweak_Hearing) 
         {
             for (const item in this.itemsData) 
             {
@@ -186,7 +186,7 @@ class EchoMiscTweaks extends EchoBaseTweak
         }
 
         //*Wear Rigs with Armor
-        if (misc_config.Wear_Rigs_With_Armor === true) 
+        if (misc_config.Wear_Rigs_With_Armor) 
         {
             for (const id in this.itemsData) 
             {

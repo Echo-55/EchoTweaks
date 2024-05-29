@@ -1,52 +1,38 @@
 import bot_config from "../configs/bot_config.json";
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { EchoBaseTweak } from "./Base/basetweak";
 
-class EchoBotTweaks
+class EchoBotTweaks extends EchoBaseTweak
 {
-    modName = "EchoTweaks";
     moduleName = "BotTweaks";
-
-    container: DependencyContainer;
-    logger: ILogger;
-    dataBase: IDatabaseTables;
-    globals: IDatabaseTables["globals"]["config"];
-    locations: IDatabaseTables["locations"];
-
-    configServer: ConfigServer;
-    botConfig: any;
 
     public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
     {
-        this.logger = logger;
-        this.configServer = container.resolve<ConfigServer>("ConfigServer");
-        this.botConfig = this.configServer.getConfig<any>(ConfigTypes.BOT)
-
-        this.globals = dataBase.globals.config;
-        this.locations = dataBase.locations;
+        super(container, logger, dataBase);
     }
 
     public init() : void
     {
-        this.logger.logWithColor(
-            `${this.modName} - ${this.moduleName} Initialized`,
-            LogTextColor.RED
-        );
+        super.init();
+
         //*Change Bot Waves
         if (bot_config.Tweak_Bot_Waves.Enabled === true) 
         {
             const botWaves = bot_config.Tweak_Bot_Waves;
             // DB.bots.core.WAVE_ONLY_AS_ONLINE = bot_waves.as_online;
-            this.globals.WAVE_COEF_LOW = botWaves.low;
-            this.globals.WAVE_COEF_MID = botWaves.medium;
-            this.globals.WAVE_COEF_HIGH = botWaves.high;
-            this.globals.WAVE_COEF_HORDE = botWaves.horde;
+            this.globalsConfig.WAVE_COEF_LOW = botWaves.low;
+            this.globalsConfig.WAVE_COEF_MID = botWaves.medium;
+            this.globalsConfig.WAVE_COEF_HIGH = botWaves.high;
+            this.globalsConfig.WAVE_COEF_HORDE = botWaves.horde;
             this.logger.logWithColor(
-                `${this.moduleName} - Updated Bot Waves: Low: ${this.globals.WAVE_COEF_LOW} - Mid: ${this.globals.WAVE_COEF_MID} - High: ${this.globals.WAVE_COEF_HIGH} - Horde: ${this.globals.WAVE_COEF_HORDE}`,
+                `${this.moduleName} - Updated Bot Waves: 
+                Low: ${this.globalsConfig.WAVE_COEF_LOW} - 
+                Mid: ${this.globalsConfig.WAVE_COEF_MID} - 
+                High: ${this.globalsConfig.WAVE_COEF_HIGH} - 
+                Horde: ${this.globalsConfig.WAVE_COEF_HORDE}`,
                 LogTextColor.GREEN
             );
         }
@@ -55,10 +41,12 @@ class EchoBotTweaks
         if (bot_config.Tweak_Bot_Count.Enabled === true) 
         {
             const botCount = bot_config.Tweak_Bot_Count;
-            this.globals.MaxBotsAliveOnMap = botCount.Max_Alive_Bots;
+            this.globalsConfig.MaxBotsAliveOnMap = botCount.Max_Alive_Bots;
             this.dataBase.bots.core.LOCAL_BOTS_COUNT = botCount.Local_Bots_Count;
             this.logger.logWithColor(
-                `${this.moduleName} - Updated Bot Count: ${this.globals.MaxBotsAliveOnMap} - ${this.dataBase.bots.core.LOCAL_BOTS_COUNT}`,
+                `${this.moduleName} - Updated Bot Count: 
+                ${this.globalsConfig.MaxBotsAliveOnMap} - 
+                ${this.dataBase.bots.core.LOCAL_BOTS_COUNT}`,
                 LogTextColor.GREEN
             );
         }
@@ -67,9 +55,9 @@ class EchoBotTweaks
         //*Change Boss Spawn Chance
         if (bot_config.Tweak_Boss_Spawn_Chance.Enabled === true) 
         {
-            for (const locationIdx in this.locations) 
+            for (const locationIdx in this.locationsData) 
             {
-                const location = this.locations[locationIdx];
+                const location = this.locationsData[locationIdx];
                 if (location.base && location.base.BossLocationSpawn) 
                 {
                     for (const bossIdx in location.base.BossLocationSpawn) 
@@ -113,21 +101,6 @@ class EchoBotTweaks
             this.botConfig.durability.default.weapon.maxDelta = 10; //default is 10
             this.logger.logWithColor(
                 `${this.moduleName} - Updated Bot Gear Durability: Armor: ${this.botConfig.durability.default.armor.minDelta} - ${this.botConfig.durability.default.armor.maxDelta} - Weapon: ${this.botConfig.durability.default.weapon.lowestMax} - ${this.botConfig.durability.default.weapon.highestMax}`,
-                LogTextColor.GREEN
-            );
-        }
-
-        //*Change Bot Loot Value
-        if (bot_config.Tweak_Bot_Loot_Value.Enabled === true) 
-        {
-            this.botConfig.pmc.maxBackpackLootTotalRub =
-                bot_config.Tweak_Bot_Loot_Value.Max_Backpack_Loot_Value; //150000 default
-            this.botConfig.pmc.maxPocketLootTotalRub =
-                bot_config.Tweak_Bot_Loot_Value.Max_Pocket_Loot_Value; //50000 default
-            this.botConfig.pmc.maxVestLootTotalRub =
-                bot_config.Tweak_Bot_Loot_Value.Max_Vest_Loot_Value; //50000 default
-            this.logger.logWithColor(
-                `${this.moduleName} - Updated Bot Loot Value: Backpack: ${this.botConfig.pmc.maxBackpackLootTotalRub} - Pocket: ${this.botConfig.pmc.maxPocketLootTotalRub} - Vest: ${this.botConfig.pmc.maxVestLootTotalRub}`,
                 LogTextColor.GREEN
             );
         }

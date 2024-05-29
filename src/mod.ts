@@ -1,9 +1,9 @@
-import { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
+import { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { DatabaseServer } from "@spt/servers/DatabaseServer";
 
 import { EchoRouters } from "./routers";
 import { EchoItemTweaks } from "./itemtweaks";
@@ -14,11 +14,11 @@ import { EchoBotTweaks } from "./bottweaks";
 import { EchoPlayerTweaks } from "./playertweaks";
 import { EchoHideoutTweaks } from "./hideouttweaks";
 
-class EchoTweaks implements IPostDBLoadMod, IPreAkiLoadMod
+class EchoTweaks implements IPostDBLoadMod, IPreSptLoadMod
 {
     modName = "EchoTweaks";
 
-    public preAkiLoad(container: DependencyContainer): void
+    public preSptLoad(container: DependencyContainer): void
     {
         const logger = container.resolve<ILogger>("WinstonLogger");
         const routers = new EchoRouters(container, logger);
@@ -35,30 +35,6 @@ class EchoTweaks implements IPostDBLoadMod, IPreAkiLoadMod
         /* -------------------------------------------------------------------------- */
         const itemTweaks = new EchoItemTweaks(container, logger, dataBase);
         itemTweaks.init();
-
-        // TODO Testing changing background color of attachments FIR based on value
-        // const prices = DB.templates.prices
-        // let parents = ['']
-        // for (const item in items)
-        // {
-        //     if (items[item]._parent === '5448fe124bdc2da5018b4567')
-        //     {
-        //         if (prices[items[item]._id])
-        //         {
-        //             let left = items[item]._props.ExtraSizeLeft
-        //             let right = items[item]._props.ExtraSizeRight
-        //             let up = items[item]._props.ExtraSizeUp
-        //             let down = items[item]._props.ExtraSizeDown
-        //             // TODO this is bad but it should work bc no mods are 2x2 (i think)
-        //             let total_size = 1 + left + right + up + down
-        //             let item_price = total_size > 1 ? prices[item] / total_size : prices[item] 
-        //             if (item_price > 10000)
-        //             {
-        //                 items[item]._props.BackgroundColor = 'yellow'
-        //             }
-        //         }
-        //     }
-        // }
 
         /* -------------------------------------------------------------------------- */
         /*                             SECTION Map Changes                            */

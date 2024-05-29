@@ -1,37 +1,23 @@
 import map_config from "../configs/map_config.json";
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import { stringify } from "querystring";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import { EchoBaseTweak } from "./Base/basetweak";
 
-
-class EchoMapTweaks
+class EchoMapTweaks extends EchoBaseTweak
 {
-    modName = "EchoTweaks";
     moduleName = "MapTweaks";
 
-    container: DependencyContainer;
-    logger: ILogger;
-    dataBase: IDatabaseTables;
-    locations: IDatabaseTables["locations"];
-    globals: IDatabaseTables["globals"]["config"];
-    items: IDatabaseTables["templates"]["items"];
-
-    configServer: ConfigServer;
     airDropConfig: any;
     locationConfig: any;
     weatherConfig: any;
 
     public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
     {
-        this.logger = logger;
-
-        this.locations = dataBase.locations;
-        this.globals = dataBase.globals.config;
-        this.items = dataBase.templates.items;
+        super(container, logger, dataBase);
 
         this.airDropConfig = container.resolve<ConfigServer>("ConfigServer").getConfig<any>(ConfigTypes.AIRDROP)
         this.locationConfig = container.resolve<ConfigServer>("ConfigServer").getConfig<any>(ConfigTypes.LOCATION)
@@ -40,40 +26,38 @@ class EchoMapTweaks
 
     public init(): void
     {
-        this.logger.logWithColor(
-            `${this.modName} - ${this.moduleName} Initialized`,
-            LogTextColor.RED
-        );
+        super.init();
+
         //* Tweak Airdrops in map json
         if (map_config.Tweak_Airdrops.Enabled)
         {
-            for (const map in this.locations)
+            for (const map in this.locationsData)
             {
                 if (map !== "base")
                 {
-                    for (const x in this.locations[map].base.AirdropParameters)
+                    for (const x in this.locationsData[map].base.AirdropParameters)
                     {
                         // Airdrop chance
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropChance =
-                            map_config.Tweak_Airdrops.Plane_Airdrop_Chance;
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropChance =
+                            map_config.Tweak_Airdrops.Base_Airdrop_Chance;
                         // Max airdrops
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropMax = 
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropMax =
                             map_config.Tweak_Airdrops.Max_Airdrops;
                         // Airdrop start and cooldown
                         // Start min
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropStartMin =
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropStartMin =
                             map_config.Tweak_Airdrops.Plane_Airdrop_Start_Min;
                         // Start max
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropStartMax =
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropStartMax =
                             map_config.Tweak_Airdrops.Plane_Airdrop_Start_Max;
                         // Cooldown min
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropCooldownMin =
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropCooldownMin =
                             map_config.Tweak_Airdrops.Plane_Airdrop_Cooldown_Min;
                         // Cooldown max
-                        this.locations[map].base.AirdropParameters[x].PlaneAirdropCooldownMax =
+                        this.locationsData[map].base.AirdropParameters[x].PlaneAirdropCooldownMax =
                             map_config.Tweak_Airdrops.Plane_Airdrop_Cooldown_Max;
                         // Min players to spawn airdrop
-                        this.locations[map].base.AirdropParameters[x].MinPlayersCountToSpawnAirdrop =
+                        this.locationsData[map].base.AirdropParameters[x].MinPlayersCountToSpawnAirdrop =
                             map_config.Tweak_Airdrops.Min_Players_Count_To_Spawn_Airdrop;
                     }
                 }
@@ -95,10 +79,10 @@ class EchoMapTweaks
         //* Change loot modifiers
         if (map_config.Tweak_Loot_Modifier.Enabled) 
         {
-            this.globals.GlobalLootChanceModifier =
+            this.globalsConfig.GlobalLootChanceModifier =
                 map_config.Tweak_Loot_Modifier.Global_Loot_Chance_Modifier;
             this.logger.logWithColor(
-                `${this.moduleName} - Global Loot Chance Modifier set to ${this.globals.GlobalLootChanceModifier}`,
+                `${this.moduleName} - Global Loot Chance Modifier set to ${this.globalsConfig.GlobalLootChanceModifier}`,
                 LogTextColor.GREEN
             );
 
@@ -111,23 +95,6 @@ class EchoMapTweaks
             {
                 this.locationConfig.staticLootMultiplier[map] = map_config.Tweak_Loot_Modifier.All_Maps_StaticLoot_Modifier
             }
-
-            // for (const map in locations)
-            // {
-            //     if (locations[map].base && locations[map].looseLoot)
-            //     {
-            //         const locationBase: ILocationData['base'] = locations[map].base
-            //         const locationLooseLoot: ILocationData['looseLoot'] = locations[map].looseLoot
-            //         locationBase.GlobalLootChanceModifier = map_config.Tweak_Loot_Modifier.Global_Loot_Chance_Modifier
-            //         locationLooseLoot.spawnpointCount.mean *= map_config.Tweak_Loot_Modifier.All_Maps_LooseLoot_Modifier
-            //         locationLooseLoot.spawnpointCount.std *= map_config.Tweak_Loot_Modifier.All_Maps_LooseLoot_Modifier
-            //         locationLooseLoot.spawnpoints.forEach(spawnPoint => {
-            //             spawnPoint.probability = 1
-            //             spawnPoint.itemDistribution.forEach(itemDist => itemDist.relativeProbability = 100)
-            //         })
-            //         logger.logWithColor(`${this.modName} - ${locationBase.GlobalLootChanceModifier}`, LogTextColor.RED)
-            //     }
-            // }
         }
 
         //*Disable Rain and Fog
@@ -145,7 +112,7 @@ class EchoMapTweaks
         //*Remove Labs Entry Card Requirement
         if (map_config.Remove_Labs_Keycard_Requirement) 
         {
-            this.locations["laboratory"].base.AccessKeys = [];
+            this.locationsData["laboratory"].base.AccessKeys = [];
             this.logger.logWithColor(
                 `${this.moduleName} - Removed Labs Keycard Requirement`,
                 LogTextColor.GREEN
@@ -155,36 +122,36 @@ class EchoMapTweaks
         //*Change spawned weapon loose loot min/max durability
         if (map_config.Tweak_LooseLoot_Weapon_Durability.Enabled) 
         {
-            for (const id in this.items) 
+            for (const id in this.itemsData) 
             {
                 //Maximum durability
                 if (
-                    (this.items[id]._parent == "5447b5cf4bdc2d65278b4567" ||
-                    this.items[id]._parent == "5447b6254bdc2dc3278b4568" ||
-                    this.items[id]._parent == "5447b5f14bdc2d61278b4567" ||
-                    this.items[id]._parent == "5447bed64bdc2d97278b4568" ||
-                    this.items[id]._parent == "5447b6094bdc2dc3278b4567" ||
-                    this.items[id]._parent == "5447b5e04bdc2d62278b4567" ||
-                    this.items[id]._parent == "5447b6194bdc2d67278b4567") &&
-                    this.items[id]._props.durabSpawnMax !== undefined
+                    (this.itemsData[id]._parent == "5447b5cf4bdc2d65278b4567" ||
+                    this.itemsData[id]._parent == "5447b6254bdc2dc3278b4568" ||
+                    this.itemsData[id]._parent == "5447b5f14bdc2d61278b4567" ||
+                    this.itemsData[id]._parent == "5447bed64bdc2d97278b4568" ||
+                    this.itemsData[id]._parent == "5447b6094bdc2dc3278b4567" ||
+                    this.itemsData[id]._parent == "5447b5e04bdc2d62278b4567" ||
+                    this.itemsData[id]._parent == "5447b6194bdc2d67278b4567") &&
+                    this.itemsData[id]._props.durabSpawnMax !== undefined
                 ) 
                 {
-                    this.items[id]._props.durabSpawnMax =
+                    this.itemsData[id]._props.durabSpawnMax =
                         map_config.Tweak_LooseLoot_Weapon_Durability.Max_Durability;
                 }
                 //Minimum durability
                 if (
-                    (this.items[id]._parent == "5447b5cf4bdc2d65278b4567" ||
-                    this.items[id]._parent == "5447b6254bdc2dc3278b4568" ||
-                    this.items[id]._parent == "5447b5f14bdc2d61278b4567" ||
-                    this.items[id]._parent == "5447bed64bdc2d97278b4568" ||
-                    this.items[id]._parent == "5447b6094bdc2dc3278b4567" ||
-                    this.items[id]._parent == "5447b5e04bdc2d62278b4567" ||
-                    this.items[id]._parent == "5447b6194bdc2d67278b4567") &&
-                    this.items[id]._props.durabSpawnMin !== undefined
+                    (this.itemsData[id]._parent == "5447b5cf4bdc2d65278b4567" ||
+                    this.itemsData[id]._parent == "5447b6254bdc2dc3278b4568" ||
+                    this.itemsData[id]._parent == "5447b5f14bdc2d61278b4567" ||
+                    this.itemsData[id]._parent == "5447bed64bdc2d97278b4568" ||
+                    this.itemsData[id]._parent == "5447b6094bdc2dc3278b4567" ||
+                    this.itemsData[id]._parent == "5447b5e04bdc2d62278b4567" ||
+                    this.itemsData[id]._parent == "5447b6194bdc2d67278b4567") &&
+                    this.itemsData[id]._props.durabSpawnMin !== undefined
                 ) 
                 {
-                    this.items[id]._props.durabSpawnMin =
+                    this.itemsData[id]._props.durabSpawnMin =
                         map_config.Tweak_LooseLoot_Weapon_Durability.Min_Durability;
                 }
             }

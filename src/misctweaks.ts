@@ -1,21 +1,16 @@
 import misc_config from "../configs/misc_config.json";
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import { EchoBaseTweak } from "./Base/basetweak";
 
-class EchoMiscTweaks
+class EchoMiscTweaks extends EchoBaseTweak
 {
-    modName = "EchoTweaks";
     moduleName = "MiscTweaks";
 
-    container: DependencyContainer;
-    logger: ILogger;
-    dataBase: IDatabaseTables;
-    items: IDatabaseTables["templates"]["items"];
-    globals: IDatabaseTables["globals"]["config"];
     traders: IDatabaseTables["traders"];
     therapist: IDatabaseTables["traders"]["therapist"];
     prapor: IDatabaseTables["traders"]["prapor"];
@@ -28,14 +23,10 @@ class EchoMiscTweaks
 
     public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
     {
-        this.logger = logger;
-        this.globals = dataBase.globals.config;
-        this.items = dataBase.templates.items;
+        super(container, logger, dataBase);
 
         this.traders = dataBase.traders;
-        // this.therapist = dataBase.traders.therapist;
         this.therapist = dataBase.traders["54cb57776803fa99248b456e"]
-        // this.prapor = dataBase.traders.prapor;
         this.prapor = dataBase.traders["54cb50c76803fa8b248b4571"]
 
         this.ragfairConfig = container.resolve<ConfigServer>("ConfigServer").getConfig<any>(ConfigTypes.RAGFAIR)
@@ -47,19 +38,17 @@ class EchoMiscTweaks
 
     public init(): void
     {
-        this.logger.logWithColor(
-            `${this.modName} - ${this.moduleName} Initialized`,
-            LogTextColor.RED
-        );
+        super.init();
+
         //* Disable flea blacklist
         if (misc_config.Disable_Blacklist === true) 
         {
             let canSellCount = 0;
             this.ragfairConfig.dynamic.blacklist.enableBsgList = false;
 
-            for (const itemKey in this.items) 
+            for (const itemKey in this.itemsData) 
             {
-                const itemDetails = this.items[itemKey];
+                const itemDetails = this.itemsData[itemKey];
                 if (
                     itemDetails._type === "Item" &&
                     !itemDetails._props.CanSellOnRagfair
@@ -87,7 +76,7 @@ class EchoMiscTweaks
             this.prapor.base.insurance.min_return_hour = 0;
             this.prapor.base.insurance.max_return_hour = 0;
 
-            this.globals.Insurance.MaxStorageTimeInHour =
+            this.globalsConfig.Insurance.MaxStorageTimeInHour =
                 misc_config.Tweak_Insurance.Max_Storage_Time;
 
             this.logger.logWithColor(
@@ -132,7 +121,7 @@ class EchoMiscTweaks
         //* Holster SMGs
         if (misc_config.Holster_SMGs === true) 
         {
-            const inventory = this.items["55d7217a4bdc2d86028b456d"];
+            const inventory = this.itemsData["55d7217a4bdc2d86028b456d"];
             const holster = inventory._props.Slots[2];
 
             holster._props.filters[0].Filter.push("5447b5e04bdc2d62278b4567");
@@ -145,13 +134,13 @@ class EchoMiscTweaks
         //* Bigger Ammo Stacks
         if (misc_config.Tweak_Ammo_Stacks.Enabled === true) 
         {
-            for (const ammo in this.items) 
+            for (const ammo in this.itemsData) 
             {
-                if (this.items[ammo]._parent === "5485a8684bdc2da71d8b4567") 
+                if (this.itemsData[ammo]._parent === "5485a8684bdc2da71d8b4567") 
                 {
-                    this.items[ammo]._props.StackMaxSize *=
+                    this.itemsData[ammo]._props.StackMaxSize *=
                         misc_config.Tweak_Ammo_Stacks.Stack_Size_Multi;
-                    this.items[ammo]._props.Weight /=
+                    this.itemsData[ammo]._props.Weight /=
                         misc_config.Tweak_Ammo_Stacks.Stack_Size_Multi;
                 }
             }
@@ -164,9 +153,9 @@ class EchoMiscTweaks
         //* Bigger Money Stacks
         if (misc_config.Tweak_Money_Stacks.Enabled === true) 
         {
-            const euros = this.items["569668774bdc2da2298b4568"]; //Euros
-            const usd = this.items["5696686a4bdc2da3298b456a"]; //USD
-            const roubles = this.items["5449016a4bdc2d6f028b456f"]; //Roubles
+            const euros = this.itemsData["569668774bdc2da2298b4568"]; //Euros
+            const usd = this.itemsData["5696686a4bdc2da3298b456a"]; //USD
+            const roubles = this.itemsData["5449016a4bdc2d6f028b456f"]; //Roubles
 
             euros._props.StackMaxSize =
                 misc_config.Tweak_Money_Stacks.EUR_Max_Stack_Size;
@@ -183,11 +172,11 @@ class EchoMiscTweaks
         //* Better Hearing
         if (misc_config.Tweak_Hearing === true) 
         {
-            for (const item in this.items) 
+            for (const item in this.itemsData) 
             {
-                if (this.items[item]._props.DeafStrength) 
+                if (this.itemsData[item]._props.DeafStrength) 
                 {
-                    this.items[item]._props.DeafStrength = "None";
+                    this.itemsData[item]._props.DeafStrength = "None";
                 }
             }
             this.logger.logWithColor(
@@ -199,7 +188,7 @@ class EchoMiscTweaks
         //*Wear Rigs with Armor
         if (misc_config.Wear_Rigs_With_Armor === true) 
         {
-            for (const id in this.items) 
+            for (const id in this.itemsData) 
             {
                 this.editSimpleItemData(id, "BlocksArmorVest", false);
             }
@@ -207,14 +196,6 @@ class EchoMiscTweaks
                 `${this.moduleName} - Updated Wear Rigs with Armor Settings`,
                 LogTextColor.GREEN
             );
-        }
-    }
-
-    public editSimpleItemData(id: string, prop: string, value: any): void
-    {
-        if (this.items[id]._props[prop] !== undefined) 
-        {
-            this.items[id]._props[prop] = value;
         }
     }
 }

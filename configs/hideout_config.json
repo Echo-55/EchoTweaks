@@ -1,5 +1,6 @@
 {
     "Tweak_Hideout_Speed": true,
+    "Max_Hideout_Upgrades": true,
     "Tweak_Scav_Case": {
         "Enabled": true,
         "Fast_Scav_Case": true,

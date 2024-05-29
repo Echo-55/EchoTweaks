@@ -1,6 +1,7 @@
 {
     "Tweak_Airdrops": {
         "Enabled": true,
+        "Base_Airdrop_Chance": 0.8,
         "Plane_Airdrop_Chance": 80,
         "Max_Airdrops": 3,
         "Plane_Airdrop_Start_Max": 450,

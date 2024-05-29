@@ -1,42 +1,22 @@
 import item_config from "../configs/item_config.json"
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { IGlobals } from "@spt-aki/models/eft/common/IGlobals";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import { EchoBaseTweak } from "./Base/basetweak";
 
-class EchoItemTweaks
+class EchoItemTweaks extends EchoBaseTweak
 {
-    modName = "EchoTweaks";
     moduleName = "ItemTweaks";
-
-    container: DependencyContainer;
-    logger: ILogger;
-    dataBase: IDatabaseTables;
-
-    items: IDatabaseTables["templates"]["items"];
-    globals: IGlobals["config"];
-
-    configServer: ConfigServer;
-    botConfig: any;
     public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
     {
-        this.logger = logger;
-
-        this.items = dataBase.templates.items;
-        this.globals = dataBase.globals.config;
-        
-        this.botConfig = container.resolve<ConfigServer>("ConfigServer").getConfig<any>(ConfigTypes.BOT);
+        super(container, logger, dataBase);
     }
 
     public init(): void
     {
-        this.logger.logWithColor(
-            `${this.modName} - ${this.moduleName} Initialized`,
-            LogTextColor.RED
-        );
+        super.init();
+
         //* Secure container ammo stack count
         if (item_config.Tweak_Secure_Container_Ammo_Stack_Count)
         {
@@ -52,9 +32,9 @@ class EchoItemTweaks
         {
             const parents = ["5c99f98d86f7745c314214b3", "5c164d2286f774194c5e69fa"];
 
-            for (const i in this.items) 
+            for (const i in this.itemsData) 
             {
-                const item = this.items[i];
+                const item = this.itemsData[i];
                 if (parents.includes(item._parent)) 
                 {
                     item._props.ExaminedByDefault = false;
@@ -73,9 +53,9 @@ class EchoItemTweaks
         //* High cap mags only two slots
         if (item_config.Lil_Big_Mags) 
         {
-            for (const i in this.items) 
+            for (const i in this.itemsData) 
             {
-                const item = this.items[i];
+                const item = this.itemsData[i];
                 if (
                     item._parent === "5448bc234bdc2d3c308b4569" &&
                     item._props.Height > 2
@@ -98,13 +78,13 @@ class EchoItemTweaks
         if (item_config.Tweak_Cases.Enabled) 
         {
             //Add Grenade Case to Item Case
-            this.items[
+            this.itemsData[
                 "59fb042886f7746c5005a7b2"
             ]._props.Grids[0]._props.filters[0].Filter.push(
                 "5e2af55f86f7746d4159f07c"
             );
             //Add Grenade Case to THICC Case
-            this.items[
+            this.itemsData[
                 "5c0a840b86f7742ffa4f2482"
             ]._props.Grids[0]._props.filters[0].Filter.push(
                 "5e2af55f86f7746d4159f07c"
@@ -119,36 +99,36 @@ class EchoItemTweaks
         if (item_config.Tweak_Meds.Enabled) 
         {
             //Analgin painkillers
-            const analgin = this.items["544fb37f4bdc2dee738b4567"];
+            const analgin = this.itemsData["544fb37f4bdc2dee738b4567"];
             analgin._props.effects_damage.Pain.duration = 95;
             //Augmentin antibiotic pills
-            this.items["590c695186f7741e566b64a2"]._props.effects_health[
+            this.itemsData["590c695186f7741e566b64a2"]._props.effects_health[
                 "Energy"
             ].value = 15; // 5
-            this.items["590c695186f7741e566b64a2"]._props.effects_health[
+            this.itemsData["590c695186f7741e566b64a2"]._props.effects_health[
                 "Hydration"
             ].value = -20; // -5
             //Morphine injector
-            this.items["544fb3f34bdc2d03748b456a"]._props.effects_health["Energy"].value =
+            this.itemsData["544fb3f34bdc2d03748b456a"]._props.effects_health["Energy"].value =
                 -5; // -10
-            this.items["544fb3f34bdc2d03748b456a"]._props.effects_health[
+            this.itemsData["544fb3f34bdc2d03748b456a"]._props.effects_health[
                 "Hydration"
             ].value = -10; // -15
             //Ibuprofen painkillers
-            this.items["5af0548586f7743a532b7e99"]._props.effects_health[
+            this.itemsData["5af0548586f7743a532b7e99"]._props.effects_health[
                 "Hydration"
             ].value = -15; // -17
             //Vaseline balm
-            this.items["5755383e24597772cb798966"]._props.MaxHpResource = 6;
-            this.items["5755383e24597772cb798966"]._props.effects_health["Energy"].value =
+            this.itemsData["5755383e24597772cb798966"]._props.MaxHpResource = 6;
+            this.itemsData["5755383e24597772cb798966"]._props.effects_health["Energy"].value =
                 -5; // -9
-            this.items["5755383e24597772cb798966"]._props.effects_health[
+            this.itemsData["5755383e24597772cb798966"]._props.effects_health[
                 "Hydration"
             ].value = -5; // -9
             //Golden Star balm
-            this.items["5751a89d24597722aa0e8db0"]._props.effects_health["Energy"].value =
+            this.itemsData["5751a89d24597722aa0e8db0"]._props.effects_health["Energy"].value =
                 -15;
-            this.items[
+            this.itemsData[
                 "5751a89d24597722aa0e8db0"
             ]._props.effects_damage.Pain.duration = 350;
             this.logger.logWithColor(`${this.moduleName} - Updated Meds`, LogTextColor.GREEN);
@@ -156,11 +136,11 @@ class EchoItemTweaks
             if (item_config.Tweak_Meds.Goldenstar_Remove_Contusion === true) 
             {
                 //Golden Star balm
-                this.globals.Health.Effects.Stimulator.Buffs.BuffsGoldenStarBalm =
+                this.globalsConfig.Health.Effects.Stimulator.Buffs.BuffsGoldenStarBalm =
                     JSON.parse(
                         "[{\"BuffType\": \"EnergyRate\",\"Chance\": 1,\"Delay\": 1,\"Duration\": 5,\"Value\": 1,\"AbsoluteValue\": true,\"SkillName\": \"\"},{\"BuffType\": \"HydrationRate\",\"Chance\": 1,\"Delay\": 1,\"Duration\": 5,\"Value\": 1,\"AbsoluteValue\": true,\"SkillName\": \"\"}]"
                     );
-                this.items["5751a89d24597722aa0e8db0"]._props.effects_damage = JSON.parse(
+                this.itemsData["5751a89d24597722aa0e8db0"]._props.effects_damage = JSON.parse(
                     "{\"Pain\": {\"delay\": 1,\"duration\": 350,\"fadeOut\": 20},\"RadExposure\": {\"delay\": 0,\"duration\": 400,\"fadeOut\": 20}}"
                 );
                 this.logger.logWithColor(
@@ -287,21 +267,21 @@ class EchoItemTweaks
 
             for (const cCase in casesID) 
             {
-                this.items[casesID[cCase]]._props.Grids[0]._props["cellsV"] = vSize[cCase];
-                this.items[casesID[cCase]]._props.Grids[0]._props["cellsH"] = hSize[cCase];
+                this.itemsData[casesID[cCase]]._props.Grids[0]._props["cellsV"] = vSize[cCase];
+                this.itemsData[casesID[cCase]]._props.Grids[0]._props["cellsH"] = hSize[cCase];
             }
             for (const secConts in secConID) 
             {
-                this.items[secConID[secConts]]._props.Grids[0]._props["cellsV"] =
+                this.itemsData[secConID[secConts]]._props.Grids[0]._props["cellsV"] =
                     secVsize[secConts];
-                this.items[secConID[secConts]]._props.Grids[0]._props["cellsH"] =
+                this.itemsData[secConID[secConts]]._props.Grids[0]._props["cellsH"] =
                     secHsize[secConts];
             }
             for (const filter in filters) 
             {
                 if (item_config.Tweak_Cases.Disable_Filters === true) 
                 {
-                    this.items[casesID[filter]]._props.Grids[0]._props["filter"] = "";
+                    this.itemsData[casesID[filter]]._props.Grids[0]._props["filter"] = "";
                 }
             }
             this.logger.logWithColor(
@@ -313,9 +293,9 @@ class EchoItemTweaks
         //* Stackable Barters
         if (item_config.Stackable_Barters.Enabled === true) 
         {
-            for (const id in this.items) 
+            for (const id in this.itemsData) 
             {
-                const base = this.items[id];
+                const base = this.itemsData[id];
                 switch (base._parent) 
                 {
                     //Battery
@@ -396,14 +376,6 @@ class EchoItemTweaks
                 `${this.moduleName} - Updated Barter Stack Size`,
                 LogTextColor.GREEN
             );
-        }
-    }
-
-    public editSimpleItemData(id: string, data: string, value: number | boolean): void 
-    {
-        if (this.items[id]._props[data] !== undefined) 
-        {
-            this.items[id]._props[data] = value;
         }
     }
 }

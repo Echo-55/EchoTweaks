@@ -1,39 +1,37 @@
 import hideout_config from "../configs/hideout_config.json";
-import { DependencyContainer } from "@spt-aki/models/external/tsyringe";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
+import { DependencyContainer } from "@spt/models/external/tsyringe";
+import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import { EchoBaseTweak } from "./Base/basetweak";
 
-class EchoHideoutTweaks
+class EchoHideoutTweaks extends EchoBaseTweak 
 {
-    modName = "EchoTweaks";
     moduleName = "HideoutTweaks";
 
-    container: DependencyContainer;
-    logger: ILogger;
-
-    dataBase: IDatabaseTables;
-    hideout: IDatabaseTables["hideout"];
-
-    public constructor(container: DependencyContainer, logger: ILogger, dataBase: IDatabaseTables)
+    public constructor(
+        container: DependencyContainer,
+        logger: ILogger,
+        dataBase: IDatabaseTables
+    ) 
     {
-        this.logger = logger;
-
-        this.hideout = dataBase.hideout;
+        super(container, logger, dataBase);
     }
 
-    public init(): void
+    public init(): void 
     {
-        this.logger.logWithColor(
-            `${this.modName} - ${this.moduleName} Initialized`,
-            LogTextColor.RED
-        );
+        super.init();
+
+        if (hideout_config.Max_Hideout_Upgrades) 
+        {
+            this.maxHideoutUpgrades();
+        }
         //*Change Hideout Construction Time Multipliers and Remove Construction Item Requirements
         if (hideout_config.Tweak_Hideout_Speed === true) 
         {
             if (hideout_config.Reduce_Construction_Time.Enabled === true) 
             {
-                this.hideout.areas.forEach((area) => 
+                this.hideoutData.areas.forEach((area) => 
                 {
                     for (const idx in area.stages) 
                     {
@@ -54,9 +52,9 @@ class EchoHideoutTweaks
             //*Change Hideout Production Time Multipliers
             if (hideout_config.Reduce_Production_Time_Multiplier.Enabled === true) 
             {
-                for (const data in this.hideout.production) 
+                for (const data in this.hideoutData.production) 
                 {
-                    const productionData = this.hideout.production[data];
+                    const productionData = this.hideoutData.production[data];
 
                     if (productionData._id == "5d5589c1f934db045e6c5492") 
                     {
@@ -93,9 +91,9 @@ class EchoHideoutTweaks
                 hideout_config.Remove_Hideout_Construction_Requirements.Enabled === true
             ) 
             {
-                for (const data in this.hideout.areas) 
+                for (const data in this.hideoutData.areas) 
                 {
-                    const areaData = this.hideout.areas[data];
+                    const areaData = this.hideoutData.areas[data];
                     for (const i in areaData.stages) 
                     {
                         if (areaData.stages[i].requirements !== undefined) 
@@ -116,9 +114,9 @@ class EchoHideoutTweaks
         {
             if (hideout_config.Tweak_Scav_Case.Fast_Scav_Case === true) 
             {
-                for (const scav in this.hideout.scavcase) 
+                for (const scav in this.hideoutData.scavcase) 
                 {
-                    const caseData = this.hideout.scavcase[scav];
+                    const caseData = this.hideoutData.scavcase[scav];
                     if (caseData.ProductionTime >= 10) 
                     {
                         caseData.ProductionTime =
@@ -133,9 +131,9 @@ class EchoHideoutTweaks
             }
             if (hideout_config.Tweak_Scav_Case.Reduce_Price === true) 
             {
-                for (const scase in this.hideout.scavcase) 
+                for (const scase in this.hideoutData.scavcase) 
                 {
-                    const caseData = this.hideout.scavcase[scase];
+                    const caseData = this.hideoutData.scavcase[scase];
                     if (
                         caseData.Requirements[0].count >= 10 &&
                         (caseData.Requirements[0].templateId ==
@@ -155,6 +153,21 @@ class EchoHideoutTweaks
             );
         }
     }
+
+    public maxHideoutUpgrades(): void 
+    {
+        this.hideoutData.areas.forEach((area) => 
+        {
+            for (const idx in area.stages) 
+            {
+                if (area.stages[idx].requirements !== undefined) 
+                {
+                    area.stages[idx].requirements = [];
+                }
+                area.stages[idx].autoUpgrade = true;
+            }
+        });
+    }
 }
 
-export { EchoHideoutTweaks }
+export { EchoHideoutTweaks };

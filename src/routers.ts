@@ -62,7 +62,6 @@ class EchoRouters
                             try
                             {
                                 const pmcData = this.profileHelper.getPmcProfile(sessionID);
-                                // logger.logWithColor(pmcData, LogTextColor.CYAN);
                                 if (player_config.Custom_Health.Enabled) 
                                 {
                                     if (this.customHealthApplied) 
@@ -153,120 +152,6 @@ class EchoRouters
             "yeet"
         );
     }
-
-    // public customHealthRouter(): void
-    // {
-    //     this.logger.logWithColor(
-    //         `${this.moduleName} - Custom health router enabled`,
-    //         LogTextColor.RED
-    //     );
-    //     // we'll use this to make sure we only apply the custom health once
-    //     let customHealthApplied = false;
-
-    //     // Custom player health hook
-    //     this.staticRouterModService.registerStaticRouter(
-    //         "EditHealth",
-    //         [
-    //             {
-    //                 // server url to intercept
-    //                 url: "/client/game/version/validate",
-    //                 // info about the request
-    //                 action: (url, info, sessionID) => 
-    //                 {
-    //                     try
-    //                     {
-    //                         const pmcData = this.profileHelper.getPmcProfile(sessionID);
-    //                         // logger.logWithColor(pmcData, LogTextColor.CYAN);
-    //                         if (player_config.Custom_Health.Enabled) 
-    //                         {
-    //                             if (customHealthApplied) 
-    //                             {
-    //                                 return this.httpResponseUtil.nullResponse();
-    //                             }
-
-    //                             pmcData.Health.BodyParts["Head"].Health.Maximum =
-    //                                 player_config.Custom_Health.Head;
-    //                             pmcData.Health.BodyParts["Head"].Health.Current =
-    //                                 player_config.Custom_Health.Head;
-
-    //                             pmcData.Health.BodyParts["Chest"].Health.Maximum =
-    //                                 player_config.Custom_Health.Chest;
-    //                             pmcData.Health.BodyParts["Chest"].Health.Current =
-    //                                 player_config.Custom_Health.Chest;
-
-    //                             pmcData.Health.BodyParts["Stomach"].Health.Maximum =
-    //                                 player_config.Custom_Health.Stomach;
-    //                             pmcData.Health.BodyParts["Stomach"].Health.Current =
-    //                                 player_config.Custom_Health.Stomach;
-
-    //                             pmcData.Health.BodyParts["LeftArm"].Health.Maximum =
-    //                                 player_config.Custom_Health.LeftArm;
-    //                             pmcData.Health.BodyParts["LeftArm"].Health.Current =
-    //                                 player_config.Custom_Health.LeftArm;
-
-    //                             pmcData.Health.BodyParts["LeftLeg"].Health.Maximum =
-    //                                 player_config.Custom_Health.LeftLeg;
-    //                             pmcData.Health.BodyParts["LeftLeg"].Health.Current =
-    //                                 player_config.Custom_Health.LeftLeg;
-
-    //                             pmcData.Health.BodyParts["RightArm"].Health.Maximum =
-    //                                 player_config.Custom_Health.RightArm;
-    //                             pmcData.Health.BodyParts["RightArm"].Health.Current =
-    //                                 player_config.Custom_Health.RightArm;
-
-    //                             pmcData.Health.BodyParts["RightLeg"].Health.Maximum =
-    //                                 player_config.Custom_Health.RightLeg;
-    //                             pmcData.Health.BodyParts["RightLeg"].Health.Current =
-    //                                 player_config.Custom_Health.RightLeg;
-
-    //                             this.logger.logWithColor(
-    //                                 `${this.moduleName} - Player custom health enabled`,
-    //                                 LogTextColor.CYAN
-    //                             );
-    //                             customHealthApplied = true;
-    //                         }
-    //                         else 
-    //                         {
-    //                             // reset health to default
-    //                             pmcData.Health.BodyParts["Head"].Health.Maximum = 35;
-    //                             pmcData.Health.BodyParts["Chest"].Health.Maximum = 85;
-    //                             pmcData.Health.BodyParts["Stomach"].Health.Maximum = 70;
-    //                             pmcData.Health.BodyParts["LeftArm"].Health.Maximum = 60;
-    //                             pmcData.Health.BodyParts["LeftLeg"].Health.Maximum = 65;
-    //                             pmcData.Health.BodyParts["RightArm"].Health.Maximum = 60;
-    //                             pmcData.Health.BodyParts["RightLeg"].Health.Maximum = 65;
-                                
-    //                             // make sure current health is not higher than max health
-    //                             for (const bodyPart in pmcData.Health.BodyParts)
-    //                             {
-    //                                 if (pmcData.Health.BodyParts[bodyPart].Health.Current > pmcData.Health.BodyParts[bodyPart].Health.Maximum)
-    //                                 {
-    //                                     pmcData.Health.BodyParts[bodyPart].Health.Current = pmcData.Health.BodyParts[bodyPart].Health.Maximum
-    //                                 }
-    //                             }
-
-    //                             this.logger.logWithColor(
-    //                                 `${this.moduleName} - Player default health`,
-    //                                 LogTextColor.CYAN
-    //                             );
-                                
-    //                             // reset the flag so we can apply the custom health again
-    //                             customHealthApplied = false;
-    //                         }
-    //                         // return null response because all we did was modify the pmcData
-    //                         return this.httpResponseUtil.nullResponse();
-    //                     }
-    //                     catch (e) 
-    //                     {
-    //                         this.logger.error("EchoTweaks - EditHealth - Unknown error: " + e);
-    //                         return this.httpResponseUtil.nullResponse();
-    //                     }
-    //                 }
-    //             }
-    //         ],
-    //         "aki"
-    //     );
-    // }
 }
 
 export { EchoRouters };

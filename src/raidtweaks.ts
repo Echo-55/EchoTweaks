@@ -23,7 +23,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         super.init();
 
         //*Remove Skill Fatigue
-        if (raid_config.Remove_Skill_Fatigue === true) 
+        if (raid_config.Remove_Skill_Fatigue) 
         {
             this.globalsConfig.SkillPointsBeforeFatigue = 10000;
             this.logger.logWithColor(
@@ -33,7 +33,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         }
 
         //*Change Skill Progress Rates
-        if (raid_config.Tweak_Skill_Rate.Enabled === true) 
+        if (raid_config.Tweak_Skill_Rate.Enabled) 
         {
             //DatabaseServer.tables.globals.config.SkillsSettings.SkillProgressRate =
             this.globalsConfig.SkillsSettings.SkillProgressRate =
@@ -45,7 +45,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         }
 
         //*Change Weapon Skill Progress Rate
-        if (raid_config.Tweak_Weapon_Skill_Rate.Enabled === true) 
+        if (raid_config.Tweak_Weapon_Skill_Rate.Enabled) 
         {
             //DatabaseServer.tables.globals.config.SkillsSettings.WeaponSkillProggressRate =
             this.globalsConfig.SkillsSettings.WeaponSkillProgressRate =
@@ -57,7 +57,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         }
 
         //*Change Scav Cooldown
-        if (raid_config.Tweak_Scav_Cooldown.Enabled === true) 
+        if (raid_config.Tweak_Scav_Cooldown.Enabled) 
         {
             this.globalsConfig.SavagePlayCooldown =
                 raid_config.Tweak_Scav_Cooldown.Scav_Cooldown;
@@ -68,7 +68,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         }
 
         //*Change Default Raid Menu Settings
-        if (raid_config.Tweak_Raid_Menu.Enabled === true) 
+        if (raid_config.Tweak_Raid_Menu.Enabled) 
         {
             this.inRaidConfig.MIAOnRaidEnd = raid_config.Tweak_Raid_Menu.MIA_On_Raid_End;
             this.inRaidConfig.raidMenuSettings.aiAmount =
@@ -91,7 +91,7 @@ class EchoRaidTweaks extends EchoBaseTweak
         }
 
         //*Change End of Raid Exp Multipliers
-        if (raid_config.Tweak_Raid_Exp_Multipliers.Enabled === true) 
+        if (raid_config.Tweak_Raid_Exp_Multipliers.Enabled) 
         {
             this.globalsConfig.exp.match_end.runnerMult =
                 raid_config.Tweak_Raid_Exp_Multipliers.Runner_Multiplier;

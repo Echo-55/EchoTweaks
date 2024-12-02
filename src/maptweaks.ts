@@ -98,7 +98,7 @@ class EchoMapTweaks extends EchoBaseTweak
         }
 
         //*Disable Rain and Fog
-        if (map_config.Tweak_Weather === true) 
+        if (map_config.Tweak_Weather) 
         {
             this.weatherConfig.weather.rain.min = 0;
             this.weatherConfig.weather.rain.max = 2;

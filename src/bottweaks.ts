@@ -19,7 +19,7 @@ class EchoBotTweaks extends EchoBaseTweak
         super.init();
 
         //*Change Bot Waves
-        if (bot_config.Tweak_Bot_Waves.Enabled === true) 
+        if (bot_config.Tweak_Bot_Waves.Enabled) 
         {
             const botWaves = bot_config.Tweak_Bot_Waves;
             // DB.bots.core.WAVE_ONLY_AS_ONLINE = bot_waves.as_online;
@@ -38,7 +38,7 @@ class EchoBotTweaks extends EchoBaseTweak
         }
 
         //*Change Bot Count
-        if (bot_config.Tweak_Bot_Count.Enabled === true) 
+        if (bot_config.Tweak_Bot_Count.Enabled) 
         {
             const botCount = bot_config.Tweak_Bot_Count;
             this.globalsConfig.MaxBotsAliveOnMap = botCount.Max_Alive_Bots;
@@ -53,7 +53,7 @@ class EchoBotTweaks extends EchoBaseTweak
 
         //TODO Don't think this works
         //*Change Boss Spawn Chance
-        if (bot_config.Tweak_Boss_Spawn_Chance.Enabled === true) 
+        if (bot_config.Tweak_Boss_Spawn_Chance.Enabled) 
         {
             for (const locationIdx in this.locationsData) 
             {
@@ -87,7 +87,7 @@ class EchoBotTweaks extends EchoBaseTweak
         }
 
         //*Change Bot Gear Durability
-        if (bot_config.Tweak_Bot_Gear_Durability.Enabled === true) 
+        if (bot_config.Tweak_Bot_Gear_Durability.Enabled) 
         {
             this.botConfig.durability.default.armor.minDelta =
                 bot_config.Tweak_Bot_Gear_Durability.Min_Armor_Durability;

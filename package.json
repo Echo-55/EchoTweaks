@@ -1,18 +1,10 @@
 {
     "name": "EchoTweaks",
-<<<<<<< HEAD
     "version": "1.3.1",
     "main": "src/mod.js",
     "license": "MIT",
     "author": "Echo55",
     "sptVersion": "3.9.*",
-=======
-    "version": "1.3.0",
-    "main": "src/mod.js",
-    "license": "MIT",
-    "author": "Echo55",
-    "sptVersion": "3.8.*",
->>>>>>> 2b85175e66860de8833f01141ffc2f05ab627012
     "scripts": {
         "setup": "npm i",
         "build": "node ./build.mjs",

@@ -14,19 +14,16 @@ import { EchoBotTweaks } from "./bottweaks";
 import { EchoPlayerTweaks } from "./playertweaks";
 import { EchoHideoutTweaks } from "./hideouttweaks";
 
-class EchoTweaks implements IPostDBLoadMod, IPreSptLoadMod
-{
+class EchoTweaks implements IPostDBLoadMod, IPreSptLoadMod {
     modName = "EchoTweaks";
 
-    public preSptLoad(container: DependencyContainer): void
-    {
+    public preSptLoad(container: DependencyContainer): void {
         const logger = container.resolve<ILogger>("WinstonLogger");
         const routers = new EchoRouters(container, logger);
         routers.init(container);
     }
 
-    public postDBLoad(container: DependencyContainer): void 
-    {
+    public postDBLoad(container: DependencyContainer): void {
         const logger = container.resolve<ILogger>("WinstonLogger");
         const dataBase: IDatabaseTables = container.resolve<DatabaseServer>("DatabaseServer").getTables();
 
